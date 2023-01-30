@@ -2,11 +2,13 @@ package hooks;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
+import io.restassured.RestAssured;
 
 public class Hooks {
-    @Before
-    public void prepareData() {
-        // действия перед каждым тестом
+    @BeforeAll
+    public static void prepareData() {
+        RestAssured.baseURI = "https://petstore.swagger.io/v2";
     }
 
     @After

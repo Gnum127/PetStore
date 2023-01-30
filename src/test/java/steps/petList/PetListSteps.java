@@ -8,22 +8,21 @@ import io.cucumber.java.ru.Тогда;
 
 public class PetListSteps {
 
-    String link = "https://petstore.swagger.io/v2/pet/findByStatus?status=";
     Response response;
 
-    @Дано("выполнен GET запрос \\/pet\\/findPetsByStatus с параметром status = {string}")
-    public void petList(String status) {
+    @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
+    public void petList(String link, String status) {
         response = RestAssured.get(link + status)
                 .andReturn();
     }
 
-    @Тогда("код ответа {int}")
+    @Тогда("^код ответа (\\d*)$")
     public void getStatus(int number) {
         String message = "expecting " + number + ", but it was " + response.getStatusCode();
         Assert.assertEquals(message, number, response.getStatusCode());
     }
 
-    @Тогда("тело ответа содержит параметр status = {string}")
+    @Тогда("^тело ответа содержит параметр status = (.*)$")
     public void getParam(String status) {
         String message = "pet in status: \"" + status + "\" not found";
         Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
