@@ -11,24 +11,22 @@ public class PetListSteps {
     String link = "https://petstore.swagger.io/v2/pet/findByStatus?status=";
     Response response;
 
-    @Дано("животные в статусе {string}")
+    @Дано("выполнен GET запрос \\/pet\\/findPetsByStatus с параметром status = {string}")
     public void petList(String status) {
         response = RestAssured.get(link + status)
                 .andReturn();
     }
 
-    @Тогда("статус ответа {int}")
+    @Тогда("код ответа {int}")
     public void getStatus(int number) {
-        if (!(number == response.getStatusCode())) {
-            Assert.fail("expecting " + number + ", but it was " + response.getStatusCode());
-        }
+        String message = "expecting " + number + ", but it was " + response.getStatusCode();
+        Assert.assertEquals(message, number, response.getStatusCode());
     }
 
-    @Тогда("тело ответа содержит {string}")
-    public void getParam(String category) {
-        if (!response.getBody().asPrettyString().contains(category)){
-            Assert.fail("response body is:\n" + response.getBody().prettyPrint());
-        }
+    @Тогда("тело ответа содержит параметр status = {string}")
+    public void getParam(String status) {
+        String message = "pet in status: \"" + status + "\" not found";
+        Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
 
     }
 
