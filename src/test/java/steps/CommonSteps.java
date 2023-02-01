@@ -6,25 +6,22 @@ import io.cucumber.java.ru.Тогда;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Assert;
+import pojo.Pet;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static pojo.Pet.petBuild;
 
 public class CommonSteps {
 
     Response response;
-
-    public static String readFile(String path) throws IOException {
-        return Files.readString(Paths.get(path));
-    }
+    Pet requestBody;
+    Object responseBody;
 
     @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
     public void petList(String link, String status) {
-        response = RestAssured.get(link + status)
-                .andReturn();
+        response = RestAssured.get(link + status).andReturn();
     }
 
     @Тогда("^код ответа (\\d*)$")
@@ -37,35 +34,28 @@ public class CommonSteps {
     public void getParam(String status) {
         String message = "pet in status: \"" + status + "\" not found";
         Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
-
     }
 
     @Когда("^выполнен POST запрос (.*) с валидными параметрами$")
-    public void postPet(String link) throws IOException {
-        String body = readFile("src/test/resources/files/postPetBody.md");
+    public void postPet(String link, Map<String, String> params) throws ClassNotFoundException {
+        requestBody = petBuild(params);
+
         response = given()
-                .headers("Accept", "application/json"
-                        , "Content-type", "application/json")
-                .body(body)
-                .post(link)
-                .then().extract().response();
+                .body(requestBody)
+                .post(link);
+        responseBody = response.getBody().as(Class.forName("pojo.Pet"));
     }
 
-    @Тогда("тело ответа содержит отправленные параметры")
-    public void responseBody() throws IOException {
-        String body = readFile("src/test/resources/files/getPetBody.md");
-        String message = "Wrong body parameters!";
-        Assert.assertTrue(message, response.getBody().asPrettyString().contains(body));
+    @Тогда("^тело ответа содержит отправленные параметры$")
+    public void responseBody() {
+        String message = "Wrong body";
+        Assert.assertEquals(message, requestBody, responseBody);
     }
 
     @Когда("^выполнен POST запрос (.*) с невалидным номером id$")
-    public void postPetWrongId(String link) throws IOException {
-        String body = readFile("src/test/resources/files/postPetWrongId.md");
+    public void postPetWrongId(String link, Map<String, String> params) {
         response = given()
-                .headers("Accept", "application/json"
-                        , "Content-type", "application/json")
-                .body(body)
-                .post(link)
-                .then().extract().response();
+                .body(petBuild(params))
+                .post(link);
     }
 }
