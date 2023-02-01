@@ -1,6 +1,5 @@
 package pojo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -8,7 +7,6 @@ import java.util.Map;
 
 @Data
 @Builder
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pet {
@@ -37,6 +35,4 @@ public class Pet {
                 .status(status)
                 .build();
     }
-
-
 }

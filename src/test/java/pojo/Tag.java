@@ -6,7 +6,6 @@ import java.util.Map;
 
 @Data
 @Builder
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tag {

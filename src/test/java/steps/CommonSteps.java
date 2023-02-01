@@ -20,36 +20,35 @@ public class CommonSteps {
     Object responseBody;
 
     @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
-    public void petList(String link, String status) {
-        response = RestAssured.get(link + status).andReturn();
+    public void getPetList(String link, String status) {
+        response = RestAssured.get(link + status);
     }
 
     @Тогда("^код ответа (\\d*)$")
-    public void getStatus(int number) {
-        String message = "expecting " + number + ", but it was " + response.getStatusCode();
-        Assert.assertEquals(message, number, response.getStatusCode());
+    public void getStatusCode(int number) {
+        Assert.assertEquals(number, response.getStatusCode());
     }
 
     @Тогда("^тело ответа содержит параметр status = (.*)$")
-    public void getParam(String status) {
+    public void getParamList(String status) {
         String message = "pet in status: \"" + status + "\" not found";
         Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
     }
 
     @Когда("^выполнен POST запрос (.*) с валидными параметрами$")
     public void postPet(String link, Map<String, String> params) throws ClassNotFoundException {
-        requestBody = petBuild(params);
-
+        requestBody = petBuild(params);  // записываем собранное тело перед отправкой
         response = given()
                 .body(requestBody)
                 .post(link);
-        responseBody = response.getBody().as(Class.forName("pojo.Pet"));
+        responseBody = response.getBody().as(Class.forName("pojo.Pet"));  // записываем тело ответа
+        Pet body = (Pet) responseBody;
+        requestBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
     }
 
     @Тогда("^тело ответа содержит отправленные параметры$")
     public void responseBody() {
-        String message = "Wrong body";
-        Assert.assertEquals(message, requestBody, responseBody);
+        Assert.assertEquals(requestBody, responseBody);
     }
 
     @Когда("^выполнен POST запрос (.*) с невалидным номером id$")
