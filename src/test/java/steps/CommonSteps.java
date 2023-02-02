@@ -11,7 +11,6 @@ import pojo.Pet;
 
 import java.util.Map;
 
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static pojo.Order.orderBuild;
 import static pojo.Pet.petBuild;
@@ -100,7 +99,7 @@ public class CommonSteps {
         Pet bodyGetId = (Pet) requestBody;
         String id = bodyGetId.getId();
         response = given()
-                .delete(link + "/" +  id);
+                .delete(link + "/" + id);
     }
 
     @Когда("^выполнен GET запрос (.*), для животного указан валидный id$")
@@ -108,13 +107,13 @@ public class CommonSteps {
         Pet bodyGetId = (Pet) requestBody;
         String id = bodyGetId.getId();
         response = given()
-                .get(link + "/" +  id);
+                .get(link + "/" + id);
     }
 
     @Когда("^выполнен DELETE запрос (.*) для удаления объекта, указан невалидный id (.*)$")
     public void deleteWithWrongId(String link, String id) {
         response = given()
-                .delete(link + "/" +  id);
+                .delete(link + "/" + id);
     }
 
     @Когда("^выполнен DELETE запрос (.*) для удаления заказа, указан валидный id$")
@@ -125,11 +124,11 @@ public class CommonSteps {
                 .delete(link + "/" + id);
     }
 
-        @Когда("^выполнен GET запрос (.*), для заказа указан валидный id$")
-        public void getOrderId(String link) {
-            Order bodyGetId = (Order) requestBody;
-            String id = bodyGetId.getId();
-            response = given()
-                    .get(link + "/" +  id);
+    @Когда("^выполнен GET запрос (.*), для заказа указан валидный id$")
+    public void getOrderId(String link) {
+        Order bodyGetId = (Order) requestBody;
+        String id = bodyGetId.getId();
+        response = given()
+                .get(link + "/" + id);
     }
 }

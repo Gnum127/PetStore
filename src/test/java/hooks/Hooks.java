@@ -1,6 +1,5 @@
 package hooks;
 
-import io.cucumber.java.After;
 import io.cucumber.java.BeforeAll;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -16,10 +15,5 @@ public class Hooks {
         headers.put("Accept", "application/json");
         headers.put("Content-type", "application/json");
         RestAssured.requestSpecification = new RequestSpecBuilder().addHeaders(headers).build();
-    }
-
-    @After
-    public void clearData() {
-        // действия после каждого теста
     }
 }
