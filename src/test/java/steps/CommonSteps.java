@@ -94,4 +94,26 @@ public class CommonSteps {
         responseBody = response.getBody().as(Class.forName("pojo.Pet"));
         requestBody = requestPetBody;
     }
+
+    @Когда("^выполнен DELETE запрос (.*) для удаления животного, указан валидный id$")
+    public void deletePet(String link) {
+        Pet bodyGetId = (Pet) requestBody;
+        String id = bodyGetId.getId();
+        response = given()
+                .delete(link + "/" +  id);
+    }
+
+    @Когда("^выполнен GET запрос (.*), указан валидный id$")
+    public void getPetId(String link) {
+        Pet bodyGetId = (Pet) requestBody;
+        String id = bodyGetId.getId();
+        response = given()
+                .get(link + "/" +  id);
+    }
+
+    @Когда("^выполнен DELETE запрос (.*) для удаления животного, указан невалидный id (.*)$")
+    public void deleteWrongPet(String link, String id) {
+        response = given()
+                .delete(link + "/" +  id);
+    }
 }
