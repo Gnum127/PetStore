@@ -16,8 +16,9 @@ import static pojo.Pet.petBuild;
 public class CommonSteps {
 
     Response response;
-    Pet requestBody;
     Object responseBody;
+    Object requestBody;
+    Pet requestPetBody;
 
     @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
     public void getPetList(String link, String status) {
@@ -35,15 +36,16 @@ public class CommonSteps {
         Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
     }
 
-    @Когда("^выполнен POST запрос (.*) с валидными параметрами$")
+    @Когда("^выполнен POST запрос (.*) с валидными параметрами животного$")
     public void postPet(String link, Map<String, String> params) throws ClassNotFoundException {
-        requestBody = petBuild(params);  // записываем собранное тело перед отправкой
+        requestPetBody = petBuild(params);  // записываем собранное тело перед отправкой
         response = given()
-                .body(requestBody)
+                .body(requestPetBody)
                 .post(link);
         responseBody = response.getBody().as(Class.forName("pojo.Pet"));  // записываем тело ответа
         Pet body = (Pet) responseBody;
-        requestBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
+        requestPetBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
+        requestBody = requestPetBody;
     }
 
     @Тогда("^тело ответа содержит отправленные параметры$")
@@ -51,7 +53,7 @@ public class CommonSteps {
         Assert.assertEquals(requestBody, responseBody);
     }
 
-    @Когда("^выполнен POST запрос (.*) с невалидным номером id$")
+    @Когда("^выполнен POST запрос (.*) с невалидным значением id животного$")
     public void postPetWrongId(String link, Map<String, String> params) {
         response = given()
                 .body(petBuild(params))
