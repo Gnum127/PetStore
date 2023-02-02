@@ -11,6 +11,7 @@ import pojo.Pet;
 
 import java.util.Map;
 
+import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static pojo.Order.orderBuild;
 import static pojo.Pet.petBuild;
@@ -46,8 +47,8 @@ public class CommonSteps {
                 .body(requestPetBody)
                 .post(link);
         responseBody = response.getBody().as(Class.forName("pojo.Pet"));  // записываем тело ответа
-        Pet body = (Pet) responseBody;
-        requestPetBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
+        Pet bodyGetId = (Pet) responseBody;
+        requestPetBody.setId(bodyGetId.getId());  // записываем в ожидаемый результат действительный id
         requestBody = requestPetBody;
     }
 
@@ -80,5 +81,17 @@ public class CommonSteps {
         response = given()
                 .body(orderBuild(params))
                 .post(link);
+    }
+
+    @Когда("^выполнен PUT запрос (.*) для внесения изменений в информацию о животном$")
+    public void putPetParameters(String link, Map<String, String> params) throws ClassNotFoundException {
+        requestPetBody = petBuild(params);  // собираем новое тело
+        Pet bodyGetId = (Pet) requestBody;
+        requestPetBody.setId(bodyGetId.getId());  // собранному телу задаем актуальное значение id
+        response = given()
+                .body(requestPetBody)
+                .put(link);
+        responseBody = response.getBody().as(Class.forName("pojo.Pet"));
+        requestBody = requestPetBody;
     }
 }
