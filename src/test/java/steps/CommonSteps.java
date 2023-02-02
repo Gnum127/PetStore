@@ -6,11 +6,13 @@ import io.cucumber.java.ru.Тогда;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Assert;
+import pojo.Order;
 import pojo.Pet;
 
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static pojo.Order.orderBuild;
 import static pojo.Pet.petBuild;
 
 public class CommonSteps {
@@ -19,6 +21,7 @@ public class CommonSteps {
     Object responseBody;
     Object requestBody;
     Pet requestPetBody;
+    Order requestOrderBody;
 
     @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
     public void getPetList(String link, String status) {
@@ -57,6 +60,25 @@ public class CommonSteps {
     public void postPetWrongId(String link, Map<String, String> params) {
         response = given()
                 .body(petBuild(params))
+                .post(link);
+    }
+
+    @Когда("^выполнен POST запрос (.*) с валидными параметрами заказа")
+    public void postOrder(String link, Map<String, String> params) throws ClassNotFoundException {
+        requestOrderBody = orderBuild(params);  // записываем собранное тело перед отправкой
+        response = given()
+                .body(requestOrderBody)
+                .post(link);
+        responseBody = response.getBody().as(Class.forName("pojo.Order"));  // записываем тело ответа
+        Order body = (Order) responseBody;
+        requestOrderBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
+        requestBody = requestOrderBody;
+    }
+
+    @Когда("^выполнен POST запрос (.*) с невалидным значением параметра (.*)")
+    public void postOrderWrongComplete(String link, String whatever, Map<String, String> params) {
+        response = given()
+                .body(orderBuild(params))
                 .post(link);
     }
 }
