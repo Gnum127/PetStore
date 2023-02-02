@@ -103,7 +103,7 @@ public class CommonSteps {
                 .delete(link + "/" +  id);
     }
 
-    @Когда("^выполнен GET запрос (.*), указан валидный id$")
+    @Когда("^выполнен GET запрос (.*), для животного указан валидный id$")
     public void getPetId(String link) {
         Pet bodyGetId = (Pet) requestBody;
         String id = bodyGetId.getId();
@@ -111,9 +111,25 @@ public class CommonSteps {
                 .get(link + "/" +  id);
     }
 
-    @Когда("^выполнен DELETE запрос (.*) для удаления животного, указан невалидный id (.*)$")
-    public void deleteWrongPet(String link, String id) {
+    @Когда("^выполнен DELETE запрос (.*) для удаления объекта, указан невалидный id (.*)$")
+    public void deleteWithWrongId(String link, String id) {
         response = given()
                 .delete(link + "/" +  id);
+    }
+
+    @Когда("^выполнен DELETE запрос (.*) для удаления заказа, указан валидный id$")
+    public void deleteOrder(String link) {
+        Order bodyGetId = (Order) requestBody;
+        String id = bodyGetId.getId();
+        response = given()
+                .delete(link + "/" + id);
+    }
+
+        @Когда("^выполнен GET запрос (.*), для заказа указан валидный id$")
+        public void getOrderId(String link) {
+            Order bodyGetId = (Order) requestBody;
+            String id = bodyGetId.getId();
+            response = given()
+                    .get(link + "/" +  id);
     }
 }
