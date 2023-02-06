@@ -21,19 +21,13 @@ public class Order {
     public String complete;
 
     public static Order orderBuild(Map<String, String> params) {
-        String id = params.get("id");
-        String petId = params.get("petId");
-        String quantity = params.get("quantity");
-        String shipDate = params.get("shipDate");
-        String status = params.get("status");
-        String complete = params.get("complete");
         return Order.builder()
-                .id(id)
-                .petId(petId)
-                .quantity(quantity)
-                .shipDate(shipDate)
-                .status(status)
-                .complete(complete)
+                .id(params.get("id"))
+                .petId(params.get("petId"))
+                .quantity(params.get("quantity"))
+                .shipDate(params.get("shipDate"))
+                .status(params.get("status"))
+                .complete(params.get("complete"))
                 .build();
     }
 }

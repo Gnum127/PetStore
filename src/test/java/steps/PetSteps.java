@@ -63,12 +63,46 @@ public class PetSteps {
     public void responseBody() throws ClassNotFoundException {
         responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
         requestBody.setId(responseBody.getId());
-        System.out.println(responseBody.toString());
         Assert.assertEquals(requestBody, responseBody);
     }
 
     @Тогда("^Pet код ответа (\\d*)$")
     public void getStatusCode(int number) {
         Assert.assertEquals(number, response.getStatusCode());
+    }
+
+    @Когда("^выполнен PUT запрос (.*) с параметрами животного$")
+    public void putPetParameters(String link, Map<String, String> params) {
+        String id = requestBody.getId();
+        requestBody = petBuild(params);
+        requestBody.setId(id);  // собранному телу запроса задаем актуальное значение id
+        response = given()
+                .body(requestBody)
+                .put(link);
+        petParams = params;
+    }
+
+    @Когда("^выполнен GET запрос (.*)id$")
+    public void getId(String link) {
+        link = link + requestBody.getId();
+        response = given().with().get(link);
+    }
+
+    @Когда("id изменен на тот, которого нет в базе")
+    public void changeId() throws ClassNotFoundException {
+        responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
+        requestBody.setId(responseBody.getId() + "1");
+    }
+
+    @Когда("id изменен на невалидный")
+    public void changeIdWrong() throws ClassNotFoundException {
+        responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
+        requestBody.setId(responseBody.getId() + "q");
+    }
+
+    @Когда("^выполнен DELETE запрос (.*)id$")
+    public void deletePet(String link) {
+        link = link + requestBody.getId();
+        response = given().delete(link);
     }
 }

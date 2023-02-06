@@ -17,8 +17,9 @@ public class Category {
     public String name;
 
     public static Category categoryBuild(Map<String, String> params) {
-        String id = params.get("categoryId");
-        String name = params.get("categoryName");
-        return Category.builder().id(id).name(name).build();
+        return Category.builder()
+                .id(params.get("categoryId"))
+                .name(params.get("categoryName"))
+                .build();
     }
 }

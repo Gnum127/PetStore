@@ -30,25 +30,9 @@ public class CommonSteps {
         Assert.assertEquals(number, response.getStatusCode());
     }
 
-    @Когда("^выполнен PUT запрос (.*) для внесения изменений в информацию о животном$")
-    public void putPetParameters(String link, Map<String, String> params) throws ClassNotFoundException {
-        requestPetBody = petBuild(params);  // собираем новое тело
-        Pet bodyGetId = (Pet) requestBody;
-        requestPetBody.setId(bodyGetId.getId());  // собранному телу задаем актуальное значение id
-        response = given()
-                .body(requestPetBody)
-                .put(link);
-        responseBody = response.getBody().as(Class.forName("pojo.Pet"));
-        requestBody = requestPetBody;
-    }
 
-    @Когда("^выполнен DELETE запрос (.*) для удаления животного, указан валидный id$")
-    public void deletePet(String link) {
-        Pet bodyGetId = (Pet) requestBody;
-        String id = bodyGetId.getId();
-        response = given()
-                .delete(link + "/" + id);
-    }
+
+
 
     @Когда("^выполнен GET запрос (.*), для животного указан валидный id$")
     public void getPetId(String link) {
