@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 @Data
@@ -37,5 +38,15 @@ public class Pet {
                 .tags(tags)
                 .status(status)
                 .build();
+    }
+
+    public static String petResponseParam(String key) {
+        if (key.contains("category")){
+            key = key.replace("category", "").toLowerCase();
+        }
+        if (key.contains("tag")){
+            key = key.replace("tag", "").toLowerCase();
+        }
+        return key;
     }
 }
