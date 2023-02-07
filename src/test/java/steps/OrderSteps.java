@@ -24,6 +24,7 @@ public class OrderSteps {
                 .body(requestBody)
                 .post(link);
         responseBody = (Order) response.getBody().as(Class.forName("pojo.Order"));
+        requestBody.setId(responseBody.getId());
     }
 
     @Тогда("^Order код ответа (\\d*)$")
@@ -39,7 +40,7 @@ public class OrderSteps {
 
     @Когда("^Order выполнен DELETE запрос (.*)id$")
     public void deletePet(String link) {
-        link = link + responseBody.getId();
+        link = link + requestBody.getId();
         response = given().delete(link);
     }
 

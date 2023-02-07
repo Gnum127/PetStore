@@ -33,7 +33,7 @@ public class PetSteps {
         String expecting;
         String key;
         String value;
-        ArrayList <String> keys = new ArrayList<>(petParams.keySet());
+        ArrayList<String> keys = new ArrayList<>(petParams.keySet());
         for (String o : keys) {
             key = o;
             value = petParams.get(key);
