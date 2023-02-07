@@ -32,16 +32,6 @@ public class CommonSteps {
 
 
 
-
-
-    @Когда("^выполнен GET запрос (.*), для животного указан валидный id$")
-    public void getPetId(String link) {
-        Pet bodyGetId = (Pet) requestBody;
-        String id = bodyGetId.getId();
-        response = given()
-                .get(link + "/" + id);
-    }
-
     @Когда("^выполнен DELETE запрос (.*) для удаления объекта, указан невалидный id (.*)$")
     public void deleteWithWrongId(String link, String id) {
         response = given()

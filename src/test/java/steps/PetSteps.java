@@ -51,12 +51,13 @@ public class PetSteps {
     }
 
     @Когда("^выполнен POST запрос (.*) с параметрами животного$")
-    public void postPet(String link, Map<String, String> params) {
+    public void postPet(String link, Map<String, String> params) throws ClassNotFoundException {
         requestBody = petBuild(params);
         response = given()
                 .body(requestBody)
                 .post(link);
         petParams = params;
+        responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
     }
 
     @Тогда("^тело ответа содержит отправленные параметры$")
@@ -89,14 +90,12 @@ public class PetSteps {
     }
 
     @Когда("id изменен на тот, которого нет в базе")
-    public void changeId() throws ClassNotFoundException {
-        responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
+    public void changeId() {
         requestBody.setId(responseBody.getId() + "1");
     }
 
     @Когда("id изменен на невалидный")
-    public void changeIdWrong() throws ClassNotFoundException {
-        responseBody = (Pet) response.getBody().as(Class.forName("pojo.Pet"));
+    public void changeIdWrong() {
         requestBody.setId(responseBody.getId() + "q");
     }
 

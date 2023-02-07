@@ -1,5 +1,6 @@
 package pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pet {
 
     public String id;
@@ -37,10 +39,10 @@ public class Pet {
     }
 
     public static String petResponseParam(String key) {
-        if (key.contains("category")){
+        if (key.contains("category")) {
             key = key.replace("category", "").toLowerCase();
         }
-        if (key.contains("tag")){
+        if (key.contains("tag")) {
             key = key.replace("tag", "").toLowerCase();
         }
         return key;
