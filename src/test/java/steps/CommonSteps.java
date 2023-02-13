@@ -27,22 +27,25 @@ public class CommonSteps {
         response = given().params(params).get(link);
     }
 
-    @Когда("^выполнен GET запрос (.*)id$")
+    @Когда("^выполнен GET запрос (.*) id$")
     public void getId(String link) {
-        link = link + id;
-        response = given().get(link);
+        response = given()
+                .pathParams("id", id, "link", link)
+                .get("/{link}/{id}");
     }
 
-    @Когда("^выполнен DELETE запрос (.*)id$")
+    @Когда("^выполнен DELETE запрос (.*) id$")
     public void delete(String link) {
-        link = link + id;
-        response = given().delete(link);
+        response = given()
+                .pathParams("id", id, "link", link)
+                .delete("/{link}/{id}");
     }
 
     @Когда("^выполнен DELETE запрос (.*) с невалидным значением параметра id = (.*{1})$")
     public void deleteWrongId(String link, String id) {
-        link = link + id;
-        response = given().delete(link);
+        response = given()
+                .pathParams("id", id, "link", link)
+                .delete("/{link}/{id}");
     }
 
     @Когда("id изменен на тот, которого нет в базе")
