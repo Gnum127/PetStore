@@ -24,7 +24,7 @@ public class CommonSteps {
 
     @Дано("^выполнен GET запрос (.*) с параметрами$")
     public void getWithParams(String link, Map<String, String> params) {
-        response = given().with().params(params).get(link);
+        response = given().params(params).get(link);
     }
 
     @Когда("^выполнен GET запрос (.*)id$")
@@ -48,5 +48,10 @@ public class CommonSteps {
     @Когда("id изменен на тот, которого нет в базе")
     public void changeId() {
         id = id + "1";
+    }
+
+    @Тогда("^тело ответа содержит отправленные параметры")
+    public void responseBody() {
+        Assert.assertEquals(requestBody, responseBody);
     }
 }

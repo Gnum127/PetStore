@@ -37,14 +37,4 @@ public class Pet {
                 .status(params.get("status"))
                 .build();
     }
-
-    public static String petResponseParam(String key) {
-        if (key.contains("category")) {
-            key = key.replace("category", "").toLowerCase();
-        }
-        if (key.contains("tag")) {
-            key = key.replace("tag", "").toLowerCase();
-        }
-        return key;
-    }
 }
