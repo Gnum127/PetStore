@@ -11,10 +11,10 @@
       | tagId        | 99                                                                      |
       | tagName      | little                                                                  |
       | status       | sold                                                                    |
-    * Pet код ответа 200
+    * код ответа 200
     * выполнен GET запрос /pet/findByStatus с параметрами
       | status | sold |
-    * Pet код ответа 200
+    * код ответа 200
     * тело ответа содержит параметры животного
 
 
@@ -27,10 +27,10 @@
       | tagId        | 99                                                                      |
       | tagName      | little                                                                  |
       | status       | pending                                                                 |
-    * Pet код ответа 200
+    * код ответа 200
     * выполнен GET запрос /pet/findByStatus с параметрами
       | status | pending |
-    * Pet код ответа 200
+    * код ответа 200
     * тело ответа содержит параметры животного
 
   Сценарий: поиск животных в статусе "available"
@@ -42,13 +42,13 @@
       | tagId        | 99                                                                      |
       | tagName      | little                                                                  |
       | status       | available                                                               |
-    * Pet код ответа 200
+    * код ответа 200
     * выполнен GET запрос /pet/findByStatus с параметрами
       | status | available |
-    * Pet код ответа 200
+    * код ответа 200
     * тело ответа содержит параметры животного
 
   Сценарий: поиск животных в статусе "whatever"
     * выполнен GET запрос /pet/findByStatus с параметрами
       | status | whatever |
-    * Pet код ответа 400
+    * код ответа 400
