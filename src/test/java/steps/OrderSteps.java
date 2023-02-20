@@ -21,12 +21,22 @@ public class OrderSteps {
     public void postOrder(String link, Map<String, String> params) {
         requestOrderBody = orderBuild(params);
         response = given()
+                .basePath(link)
                 .body(requestOrderBody)
-                .post(link);
+                .post();
         responseOrderBody = response.getBody().as(Order.class);
         id = responseOrderBody.getId();
         requestOrderBody.setId(responseOrderBody.getId());
         responseBody = responseOrderBody;
         requestBody = requestOrderBody;
+    }
+
+    @Когда("^выполнен GET запрос (.*) с параметром id заказа")
+    public void getOrderId(String link) {
+        response = given()
+                .basePath(link + "/" + id)
+                .get();
+        responseOrderBody = response.getBody().as(Order.class);
+        responseBody = responseOrderBody;
     }
 }
