@@ -1,5 +1,6 @@
 package pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pet {
 
     public String id;
@@ -22,20 +24,17 @@ public class Pet {
     public String status;
 
     public static Pet petBuild(Map<String, String> params) {
-        String id = params.get("id");
-        String name = params.get("name");
         ArrayList<String> photoUrls = new ArrayList<>();
         photoUrls.add(params.get("photoUrls"));
-        String status = params.get("status");
         ArrayList<Tag> tags = new ArrayList<>();
         tags.add(Tag.tagBuild(params));
         return Pet.builder()
-                .id(id)
+                .id(params.get("id"))
                 .category(Category.categoryBuild(params))
-                .name(name)
+                .name(params.get("name"))
                 .photoUrls(photoUrls)
                 .tags(tags)
-                .status(status)
+                .status(params.get("status"))
                 .build();
     }
 }

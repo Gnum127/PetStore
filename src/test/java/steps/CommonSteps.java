@@ -3,60 +3,58 @@ package steps;
 import io.cucumber.java.ru.Дано;
 import io.cucumber.java.ru.Когда;
 import io.cucumber.java.ru.Тогда;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.Assert;
-import pojo.Pet;
 
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
-import static pojo.Pet.petBuild;
 
 public class CommonSteps {
 
-    Response response;
-    Object responseBody;
-    Object requestBody;
-    Pet requestPetBody;
+    public static Response response;
+    public static Object requestBody;
+    public static Object responseBody;
+    public static String id;
 
-    @Дано("^выполнен GET запрос (.*) с параметром status = (.*)$")
-    public void getPetList(String link, String status) {
-        response = RestAssured.get(link + status);
-    }
-
-    @Тогда("^код ответа (\\d*)$")
+    @Тогда("^код ответа (\\d{3})$")
     public void getStatusCode(int number) {
         Assert.assertEquals(number, response.getStatusCode());
     }
 
-    @Тогда("^тело ответа содержит параметр status = (.*)$")
-    public void getParamList(String status) {
-        String message = "pet in status: \"" + status + "\" not found";
-        Assert.assertTrue(message, response.getBody().asPrettyString().contains(status));
+    @Дано("^выполнен GET запрос (.*) с параметрами$")
+    public void getWithParams(String link, Map<String, String> params) {
+        response = given().params(params).get(link);
     }
 
-    @Когда("^выполнен POST запрос (.*) с валидными параметрами животного$")
-    public void postPet(String link, Map<String, String> params) throws ClassNotFoundException {
-        requestPetBody = petBuild(params);  // записываем собранное тело перед отправкой
+    @Когда("^выполнен GET запрос (.*) id$")
+    public void getId(String link) {
         response = given()
-                .body(requestPetBody)
-                .post(link);
-        responseBody = response.getBody().as(Class.forName("pojo.Pet"));  // записываем тело ответа
-        Pet body = (Pet) responseBody;
-        requestPetBody.setId(body.getId());  // записываем в ожидаемый результат действительный id
-        requestBody = requestPetBody;
+                .pathParams("id", id, "link", link)
+                .get("/{link}/{id}");
     }
 
-    @Тогда("^тело ответа содержит отправленные параметры$")
+    @Когда("^выполнен DELETE запрос (.*) id$")
+    public void delete(String link) {
+        response = given()
+                .pathParams("id", id, "link", link)
+                .delete("/{link}/{id}");
+    }
+
+    @Когда("^выполнен DELETE запрос (.*) с невалидным значением параметра id = (.*{1})$")
+    public void deleteWrongId(String link, String id) {
+        response = given()
+                .pathParams("id", id, "link", link)
+                .delete("/{link}/{id}");
+    }
+
+    @Когда("id изменен на тот, которого нет в базе")
+    public void changeId() {
+        id = id + "1";
+    }
+
+    @Тогда("^тело ответа содержит отправленные параметры")
     public void responseBody() {
         Assert.assertEquals(requestBody, responseBody);
-    }
-
-    @Когда("^выполнен POST запрос (.*) с невалидным значением id животного$")
-    public void postPetWrongId(String link, Map<String, String> params) {
-        response = given()
-                .body(petBuild(params))
-                .post(link);
     }
 }
